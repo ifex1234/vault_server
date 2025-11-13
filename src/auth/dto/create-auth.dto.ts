@@ -4,6 +4,7 @@ import {
   IsString,
   MaxLength,
   MinLength,
+  IsOptional,
 } from 'class-validator';
 
 export class RegisterUserDto {
@@ -27,6 +28,7 @@ export class RegisterUserDto {
   lastName: string;
 
   @IsString()
+  @IsOptional()
   @IsNotEmpty()
   @MinLength(4, { message: 'PIN must be at least 4 characters long' })
   @MaxLength(4, { message: 'PIN must be at most 4 characters long' })

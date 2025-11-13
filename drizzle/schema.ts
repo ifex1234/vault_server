@@ -36,7 +36,7 @@ export const user = pgTable(
     firstName: text().notNull(),
     lastName: text().notNull(),
     password: text().notNull(),
-    pin: text().notNull(),
+    pin: text(),
   },
   (table) => [
     uniqueIndex('User_email_key').using(
@@ -55,20 +55,21 @@ export const customer = pgTable(
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     email: text(),
-    address: text(),
     firstName: text().notNull(),
     lastName: text().notNull(),
-    otherName: text().notNull(),
     customerAddress: text(),
     customerBusinessAddress: text(),
     phoneNumber: integer(),
+    phoneNumber2: integer(),
     bvn: integer('BVN'),
     nin: integer('NIN'),
     customerDob: timestamp({ precision: 3, mode: 'string' }),
     utilityBillUrl: text(),
     identificationUrl: text(),
-    creatorEmail: text(),
-    nuban: integer(),
+    // nuban: integer(),
+    creatorId: integer('creator_id')
+      .notNull()
+      .references(() => user.id),
   },
   (table) => [
     uniqueIndex('Customer_BVN_key').using(
@@ -83,10 +84,10 @@ export const customer = pgTable(
       'btree',
       table.email.asc().nullsLast().op('text_ops'),
     ),
-    uniqueIndex('Customer_nuban_key').using(
-      'btree',
-      table.nuban.asc().nullsLast().op('int4_ops'),
-    ),
+    // uniqueIndex('Customer_nuban_key').using(
+    //   'btree',
+    //   table.nuban.asc().nullsLast().op('int4_ops'),
+    // ),
     uniqueIndex('Customer_phoneNumber_key').using(
       'btree',
       table.phoneNumber.asc().nullsLast().op('int4_ops'),
