@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   Controller,
   Post,
@@ -14,16 +17,19 @@ import { AuthGuard } from '@nestjs/passport';
 import { RegisterUserDto } from './dto/create-auth.dto';
 import { LoginUserDto } from './dto/login-userDTO';
 import { VerifyPinDto } from './dto/verify-pinDTO';
+import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-
+  @HttpCode(201)
+  @HttpCode(HttpStatus.CREATED)
   @Post('register')
   async register(@Body() registerUserDto: RegisterUserDto) {
     return this.authService.register(registerUserDto);
   }
 
+  @HttpCode(200)
   @HttpCode(HttpStatus.OK)
   @Post('login')
   async login(@Body() loginUserDto: LoginUserDto) {
@@ -49,5 +55,11 @@ export class AuthController {
       throw new UnauthorizedException('Invalid PIN');
     }
     return { success: true };
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('reset-password')
+  async resetPassword(@Body() resetPasswordDto: UpdateUserDto) {
+    return this.authService.resetPassword(resetPasswordDto);
   }
 }

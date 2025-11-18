@@ -6,7 +6,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors({
-    origin: 'http://localhost:63734', // Allow requests from your Flutter app's origin
+    // origin: 'http://localhost:63734', // Allow requests from your Flutter app's origin
+    origin: '*', // Allow requests from your Flutter app's origin
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Specify allowed methods
     credentials: true, // If you're using cookies or authorization headers
   });

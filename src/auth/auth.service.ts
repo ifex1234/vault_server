@@ -4,12 +4,14 @@ import {
   UnauthorizedException,
   ConflictException,
   BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
 import { RegisterUserDto } from './dto/create-auth.dto';
 import { LoginUserDto } from './dto/login-userDTO';
+import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -29,7 +31,6 @@ export class AuthService {
     let hashedPin: string | undefined;
     if (registerUserDto.pin) {
       if (registerUserDto.pin.length < 4) {
-        // Basic validation
         throw new BadRequestException('PIN must be at least 4 digits');
       }
       hashedPin = await bcrypt.hash(registerUserDto.pin, 10);
@@ -44,8 +45,27 @@ export class AuthService {
 
     const payload = { email: user.email, sub: user.id };
     return {
+      message: 'success',
       access_token: this.jwtService.sign(payload),
     };
+  }
+
+  async resetPassword(
+    resetPasswordDto: UpdateUserDto,
+  ): Promise<{ message: string }> {
+    const user = await this.usersService.findByEmail(resetPasswordDto.email);
+
+    if (!user) {
+      throw new NotFoundException('Invalid or expired password reset token.');
+    }
+
+    const newHashedPassword = await bcrypt.hash(resetPasswordDto.password, 10);
+
+    await this.usersService.update(user.email, {
+      password: newHashedPassword,
+    });
+
+    return { message: 'Password has been successfully reset.' };
   }
 
   async login(loginUserDto: LoginUserDto) {
@@ -82,7 +102,7 @@ export class AuthService {
   async verifyPin(userId: number, pin: string): Promise<boolean> {
     const user = await this.usersService.findById(userId);
     if (!user || !user.pin) {
-      return false; // User not found or no PIN set
+      return false;
     }
 
     const isPinValid = await bcrypt.compare(pin, user.pin);

@@ -29,6 +29,34 @@
       "when": 1762991482020,
       "tag": "0003_pretty_sunfire",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1763051974004,
+      "tag": "0004_happy_surge",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1763151885107,
+      "tag": "0005_cooing_hairball",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1763187644506,
+      "tag": "0006_peaceful_black_knight",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1763401301394,
+      "tag": "0007_harsh_abomination",
+      "breakpoints": true
     }
   ]
 }

@@ -1,4 +1,9 @@
-import { IsEmail, IsString, IsUUID } from 'class-validator';
+import { IsEmail, IsEnum, IsNumber, IsString } from 'class-validator';
+
+enum Gender {
+  MALE = 'male',
+  FEMALE = 'female',
+}
 
 export class CreateCustomerDto {
   @IsString()
@@ -12,20 +17,22 @@ export class CreateCustomerDto {
   customerAddress: string;
   @IsString()
   customerBusinessAddress: string;
-  @IsString()
+  @IsNumber()
   phoneNumber: number;
-  @IsString()
+  @IsNumber()
   phoneNumber2: number;
-  @IsString()
+  @IsNumber()
   BVN: number;
-  @IsString()
+  @IsNumber()
   NIN: number;
+  @IsEnum(Gender)
+  gender: Gender;
   @IsString()
   customerDOB: Date;
   @IsString()
   utilityBillUrl: string;
   @IsString()
   identificationUrl: string;
-  @IsUUID()
+  @IsNumber()
   creatorId: number;
 }
