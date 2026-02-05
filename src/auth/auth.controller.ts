@@ -4,6 +4,7 @@
 import {
   Controller,
   Post,
+  Put,
   Body,
   HttpCode,
   HttpStatus,
@@ -42,6 +43,7 @@ export class AuthController {
     return req.user;
   }
 
+  @HttpCode(200)
   @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.OK)
   @Post('verify-pin')
@@ -56,9 +58,9 @@ export class AuthController {
     }
     return { success: true };
   }
-
+  @HttpCode(200)
   @HttpCode(HttpStatus.OK)
-  @Post('reset-password')
+  @Put('reset-password')
   async resetPassword(@Body() resetPasswordDto: UpdateUserDto) {
     return this.authService.resetPassword(resetPasswordDto);
   }

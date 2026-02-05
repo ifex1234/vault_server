@@ -56,7 +56,7 @@ export class AuthService {
     const user = await this.usersService.findByEmail(resetPasswordDto.email);
 
     if (!user) {
-      throw new NotFoundException('Invalid or expired password reset token.');
+      throw new NotFoundException('User with this email does not exist');
     }
 
     const newHashedPassword = await bcrypt.hash(resetPasswordDto.password, 10);
@@ -79,7 +79,7 @@ export class AuthService {
       user.password,
     );
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Email or password not valid');
     }
 
     const payload = { email: user.email, sub: user.id };

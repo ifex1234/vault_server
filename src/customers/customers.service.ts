@@ -1,6 +1,11 @@
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { customer } from '../../drizzle/schema';
-import { Injectable, Inject, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  Inject,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import * as schema from '../../drizzle/schema';
 import { eq } from 'drizzle-orm';
@@ -46,17 +51,15 @@ export class CustomersService {
     return newUCustomer;
   }
 
-  // async findAll(creatorId: number) {
-  //   const data = await this.db.query.customer.findMany({
-  //     where: eq(customer.creatorId, creatorId),
-  //   });
-  //   if (!data || data.length === 0) {
-  //     throw new NotFoundException(
-  //       `No customers found for user with ID ${creatorId}`,
-  //     );
-  //   }
-  //   return data;
-  // }
+  async findById(id: number) {
+    const data = await this.db.query.customer.findMany({
+      where: eq(customer.creatorId, id),
+    });
+    if (!data || data.length === 0) {
+      throw new NotFoundException(`No customers found for user with ID ${id}`);
+    }
+    return data;
+  }
 
   async findAll() {
     return this.db.query.customer.findMany({

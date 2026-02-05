@@ -1,11 +1,14 @@
 import {
   Controller,
   Post,
+  Get,
   Body,
   Param,
   Delete,
   Request,
   UseGuards,
+  NotFoundException,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
@@ -21,17 +24,17 @@ export class CustomersController {
     return this.customersService.create(userId, createCustomerDto);
   }
 
-  // @Get('user/:userId')
-  // async findAll(@Param('userId', ParseIntPipe) creatorId: number) {
-  //   try {
-  //     return await this.customersService.findAll(creatorId);
-  //   } catch (error) {
-  //     if (error instanceof NotFoundException) {
-  //       throw new NotFoundException(error.message);
-  //     }
-  //     throw error;
-  //   }
-  // }
+  @Get('user/:userId')
+  async findAll(@Param('userId', ParseIntPipe) creatorId: number) {
+    try {
+      return await this.customersService.findById(creatorId);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
+  }
 
   // @Get(':id')
   // findOne(@Param('id') id: string) {
